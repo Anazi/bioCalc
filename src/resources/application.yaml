@@ -1,0 +1,57 @@
+# Configuration for the app
+
+app:
+  loggingLevel: INFO  # Mandatory: Available levels: DEBUG, INFO, WARN, ERROR
+  fixedColumns:
+    - lipidSpecies  # Optional: Fixed columns that are expected in the input Excel file
+  supportedGraphTypes:  # Optional: Types of graphs supported
+    - Bar
+    - Volcano
+    - HeatMap
+    - Dot
+    - Pie
+  excelFilePath: "controlVsHumanized.xlsx"  # Optional: Where the Excel file will be read from
+
+# Configuration for user-specific options
+
+user:
+  calculation_option: "ttest"  # Mandatory: Choose the calculation type. Available options: "ttest", "another_calculation"
+  reporting:
+    generateReport: true  # Mandatory: Whether to generate a report
+    outputFileName: "controlVsHumanizedAnalysis.xlsx"  # Mandatory [if generateReport is true]: Path to the input data file
+    sheetNames: # Optional: Sheet names for the Excel report
+      data_sheet: "RawData"
+      result_sheet: "Results"
+    reportGraphOptions:
+      includeInExcel: true  # Optional: Include the graph in the Excel report
+      separateImage: true  # Optional: Save the graph as a separate image
+      imageFormat: "png"  # Optional: Format for the saved image (png, jpg, etc.)
+  options:
+    - ttestOptions:
+        calculations:  # Mandatory: Types of calculations to perform
+          - pValue
+          - logPValue
+          - foldChange
+          - log2FoldChange
+        sortBy: "log2FoldChange"  # Optional: Column to sort the results by
+        ascending: true  # Optional: Sort order, true for ascending, false for descending
+
+    - graphOptions:
+        graphType: "Volcano"  # Mandatory: Type of graph to generate
+        xAxis: "log2FoldChange"  # Optional / [Mandatory if reporting.graph.includeInExcel or separateImage is true] : The variable for the X-axis
+        yAxis: "pValue"  # Optional / [Mandatory if reporting.graph.includeInExcel or separateImage is true] : The variable for the Y-axis
+        color: "blue"  # Optional: Color scheme for the graph
+        hue: "condition"  # Optional: Variable for color encoding
+        style: "ggplot"  # Optional / [Mandatory if reporting.graph.includeInExcel or separateImage is true] : Style of the graph
+        palette: "coolwarm"  # Optional: Color palette to use
+        title: "Volcano Plot of Lipid Species"  # Optional / [Mandatory if reporting.graph.includeInExcel or separateImage is true] : Title of the graph
+        xLabel: "log2FoldChange"  # Optional: Label for the X-axis
+        yLabel: "pValue"  # Optional: Label for the Y-axis
+        dpi: 300  # Optional: Dots per inch for image quality
+
+#graph stype options:
+#  'ggplot': Mimics ggplot (a popular plotting package for R)
+#  'seaborn-darkgrid': Uses a dark grid, as seen in Seaborn plots
+#  'bmh': Bayesian Methods for Hackers style
+#  'classic': Reverts to older Matplotlib styles
+#  'fast': Intended to be performant on a wide range of systems
